@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PropCast — Price Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .hero {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            padding: 50px 0;
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .result-card {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
+            border-radius: 15px;
+            padding: 30px;
+        }
+        .price-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #4a90d9;
+        }
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #4a90d9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+            margin: 0 auto;
+        }
+        .stat-box {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        .form-label { font-weight: 600; }
+        .btn-predict {
+            background: linear-gradient(135deg, #1a1a2e, #4a90d9);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+        }
+        .btn-predict:hover { opacity: 0.9; color: white; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-dark" style="background-color: #1a1a2e;">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4" href="/">🏠 PropCast</a>
+            <div>
+                <a href="/" class="btn btn-outline-light btn-sm me-2">📂 Upload Data</a>
+                <a href="/predict/" class="btn btn-light btn-sm">🤖 Price Predictor</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="container text-center">
+            <h1 class="display-5 fw-bold">🤖 AI Price Predictor</h1>
+            <p class="lead mt-2">Enter property details and get instant AI-powered price prediction</p>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row g-4">
+
+            <!-- LEFT — Input Form -->
+            <div class="col-md-5">
+                <div class="card p-4">
+                    <h5 class="mb-4">📋 Enter Property Details</h5>
+
+                    {% if error %}
+                    <div class="alert alert-danger">⚠️ {{ error }}</div>
+                    {% endif %}
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- Location -->
+                        <div class="mb-3">
+                            <label class="form-label">📍 Location</label>
+                            {% if locations %}
+                            <select name="location" class="form-select" required>
+                                <option value="">-- Select Location --</option>
+                                {% for loc in locations %}
+                                <option value="{{ loc }}">{{ loc }}</option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <input type="text" name="location" class="form-control"
+                                placeholder="e.g. Gachibowli" required>
+                            {% endif %}
+                        </div>
+
+                        <!-- BHK -->
+                        <div class="mb-3">
+                            <label class="form-label">🏠 BHK Type</label>
+                            <select name="bhk" class="form-select" required>
+                                <option value="">-- Select BHK --</option>
+                                <option value="1">1 BHK</option>
+                                <option value="2">2 BHK</option>
+                                <option value="3">3 BHK</option>
+                                <option value="4">4 BHK</option>
+                                <option value="5">5 BHK</option>
+                            </select>
+                        </div>
+
+                        <!-- Area -->
+                        <div class="mb-3">
+                            <label class="form-label">📐 Area (sqft)</label>
+                            <input type="number" name="area_sqft" class="form-control"
+                                placeholder="e.g. 1200" min="200" max="10000" required>
+                        </div>
+
+                        <!-- Age -->
+                        <div class="mb-3">
+                            <label class="form-label">🏗️ Property Age (Years)</label>
+                            <input type="number" name="age_years" class="form-control"
+                                placeholder="e.g. 3" min="0" max="50" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-predict w-100 mt-2">
+                            🚀 Predict Price
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- RIGHT — Results -->
+            <div class="col-md-7">
+
+                {% if result %}
+                <!-- RESULT CARD -->
+                <div class="result-card">
+                    <h5 class="mb-4">🎯 Prediction Results</h5>
+
+                    <!-- Predicted Price -->
+                    <div class="text-center mb-4">
+                        <p class="mb-1 text-white-50">Estimated Property Price</p>
+                        <div class="price-display">{{ result.price_crore_str }}</div>
+                        <p class="text-white-50 mt-1">({{ result.price_lakhs }} Lakhs)</p>
+                    </div>
+
+                    <!-- Stats Row -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-4">
+                            <div class="stat-box">
+                                <div class="score-circle">{{ result.demand_score }}</div>
+                                <p class="mt-2 mb-0 small">Demand Score</p>
+                                <p class="mb-0 text-white-50" style="font-size:11px;">out of 10</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box">
+                                <div class="score-circle" style="background:#28a745;">
+                                    {{ result.accuracy }}%
+                                </div>
+                                <p class="mt-2 mb-0 small">Model Accuracy</p>
+                                <p class="mb-0 text-white-50" style="font-size:11px;">R² Score</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="stat-box">
+                                <div class="score-circle" style="background:#e83e8c;">
+                                    {{ result.bhk }}
+                                </div>
+                                <p class="mt-2 mb-0 small">BHK Type</p>
+                                <p class="mb-0 text-white-50" style="font-size:11px;">selected</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Property Details -->
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="stat-box">
+                                <p class="mb-0 text-white-50 small">📍 Location</p>
+                                <p class="mb-0 fw-bold">{{ result.location }}</p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-box">
+                                <p class="mb-0 text-white-50 small">📐 Area</p>
+                                <p class="mb-0 fw-bold">{{ result.area_sqft }} sqft</p>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <div class="stat-box">
+                                <p class="mb-0 text-white-50 small">🏗️ Age</p>
+                                <p class="mb-0 fw-bold">{{ result.age_years }} Years</p>
+                            </div>
+                        </div>
+                        <div class="col-6 mt-2">
+                            <div class="stat-box">
+                                <p class="mb-0 text-white-50 small">🤖 Model</p>
+                                <p class="mb-0 fw-bold" style="font-size:12px;">{{ result.model_used }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trained on -->
+                    <p class="text-center text-white-50 mt-4 mb-0 small">
+                        Model trained on {{ result.trained_on }} properties
+                    </p>
+                </div>
+
+                {% else %}
+                <!-- EMPTY STATE -->
+                <div class="card p-5 text-center">
+                    <p class="display-1">🏠</p>
+                    <h5>Enter property details to get prediction</h5>
+                    <p class="text-muted">Our AI model will analyze your input and predict the market price instantly</p>
+                    <hr>
+                    <p class="text-muted small">
+                        💡 Make sure you have uploaded your property CSV data first
+                        <a href="/">Click here to upload</a>
+                    </p>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

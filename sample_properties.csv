@@ -1,0 +1,31 @@
+Location,BHK,Area_sqft,Price_Lakhs,Age_Years,Parking,Status
+Gachibowli - Hyderabad,2,1200,85,3,Yes,Sold
+Kondapur - Hyderabad,3,1800,145,7,Yes,Available
+Banjara Hills - Hyderabad,4,3200,380,15,Yes,Sold
+Madhapur - Hyderabad,2,1100,72,2,No,Available
+Hitech City - Hyderabad,3,2100,210,5,Yes,Sold
+Whitefield - Bangalore,2,1300,95,4,Yes,Sold
+Koramangala - Bangalore,3,1900,220,8,Yes,Available
+Indiranagar - Bangalore,3,2000,280,10,Yes,Sold
+Electronic City - Bangalore,2,1100,68,3,No,Sold
+HSR Layout - Bangalore,3,1800,190,6,Yes,Available
+Andheri - Mumbai,2,950,180,12,No,Sold
+Bandra - Mumbai,4,2800,650,20,Yes,Available
+Powai - Mumbai,3,1700,320,8,Yes,Sold
+Thane - Mumbai,2,1050,120,5,No,Available
+Navi Mumbai - Mumbai,2,1000,110,4,No,Sold
+OMR - Chennai,2,1200,82,3,Yes,Sold
+Anna Nagar - Chennai,3,2100,195,15,Yes,Sold
+Velachery - Chennai,2,1100,78,6,No,Available
+Porur - Chennai,2,1000,65,4,No,Sold
+Tambaram - Chennai,2,950,55,8,No,Available
+Dwarka - Delhi,3,1500,150,10,Yes,Available
+Noida Sector 62 - Delhi,2,1100,95,3,No,Sold
+Gurgaon - Delhi,4,3000,480,18,Yes,Sold
+Rohini - Delhi,2,1200,110,7,Yes,Available
+Vasant Kunj - Delhi,3,2200,320,12,Yes,Sold
+Hinjewadi - Pune,2,1100,88,2,Yes,Sold
+Kothrud - Pune,3,1700,160,9,Yes,Available
+Wakad - Pune,2,1050,92,3,Yes,Sold
+Baner - Pune,3,1600,175,7,Yes,Sold
+Hadapsar - Pune,2,1000,70,5,No,Available

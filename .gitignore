@@ -1,0 +1,20 @@
+# Secret files — never upload these
+.env
+
+# Database — no need to upload
+db.sqlite3
+
+# Uploaded CSV files
+media/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+env/
+
+# VS Code settings
+.vscode/
